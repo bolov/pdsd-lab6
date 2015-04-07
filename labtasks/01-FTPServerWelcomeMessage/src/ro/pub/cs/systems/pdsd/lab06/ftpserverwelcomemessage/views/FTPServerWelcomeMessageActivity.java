@@ -40,17 +40,13 @@ public class FTPServerWelcomeMessageActivity extends Activity {
 				Socket socket = new Socket(FTPServerAddressEditText.getText().toString(), Constants.FTP_PORT);
 				final BufferedReader br = Utilities.getReader(socket);
 				
+				final String line = br.readLine();
+				
 				
 				FTPServerAddressEditText.post(new Runnable() {
 					@Override
 					public void run() {
-						try {
-							String line = br.readLine();
-							welcomeMessageTextView.append(line);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						welcomeMessageTextView.append(line);
 						
 					}
 				});
