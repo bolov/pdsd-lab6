@@ -1,7 +1,12 @@
 package ro.pub.cs.systems.pdsd.lab06.ftpserverwelcomemessage.views;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.*;
+
 import ro.pub.cs.systems.pdsd.lab06.ftpserverwelcomemessage.R;
 import ro.pub.cs.systems.pdsd.lab06.ftpserverwelcomemessage.general.Constants;
+import ro.pub.cs.systems.pdsd.lab06.ftpserverwelcomemessage.general.Utilities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +37,24 @@ public class FTPServerWelcomeMessageActivity extends Activity {
 				// - the value does not start with Constants.FTP_MULTILINE_START_CODE2
 				// append the line to the welcomeMessageTextView text view content (on the UI thread!!!)
 				// close the socket
+				Socket socket = new Socket(FTPServerAddressEditText.getText().toString(), Constants.FTP_PORT);
+				final BufferedReader br = Utilities.getReader(socket);
+				
+				
+				FTPServerAddressEditText.post(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							String line = br.readLine();
+							welcomeMessageTextView.append(line);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				});
+				
 
 			} catch (Exception exception) {
 				Log.e(Constants.TAG, "An exception has occurred: "+exception.getMessage());
